@@ -1,0 +1,119 @@
+# Chat API Contract
+
+## Overview
+This contract defines the API for the AI chatbot functionality, allowing users to interact with the todo system using natural language.
+
+## Base URL
+```
+/api/{user_id}/chat
+```
+
+## Authentication
+All requests require a valid JWT token in the Authorization header:
+```
+Authorization: Bearer {jwt_token}
+```
+
+## POST /api/{user_id}/chat
+
+### Description
+Send a message to the AI chatbot and receive a response. The system will process natural language requests to manage todos.
+
+### Parameters
+Path Parameters:
+- `user_id` (string, required): The ID of the user making the request. Must match the user ID in the JWT token.
+
+### Request Body
+```json
+{
+  "conversation_id": "integer, optional",
+  "message": "string, required, min length 1, max length 1000"
+}
+```
+
+### Headers
+```
+Content-Type: application/json
+Authorization: Bearer {jwt_token}
+```
+
+### Success Response
+**Code**: 200 OK
+
+```json
+{
+  "conversation_id": "integer",
+  "response": "string",
+  "tool_calls": [
+    {
+      "name": "string",
+      "arguments": "object"
+    }
+  ]
+}
+```
+
+### Error Responses
+**Code**: 400 Bad Request
+```json
+{
+  "error": "string",
+  "message": "string"
+}
+```
+
+**Code**: 401 Unauthorized
+```json
+{
+  "error": "Unauthorized",
+  "message": "Invalid or missing JWT token"
+}
+```
+
+**Code**: 403 Forbidden
+```json
+{
+  "error": "Forbidden",
+  "message": "User ID in token does not match URL user_id"
+}
+```
+
+**Code**: 500 Internal Server Error
+```json
+{
+  "error": "Internal Server Error",
+  "message": "An unexpected error occurred"
+}
+```
+
+### Example Request
+```json
+{
+  "conversation_id": 123,
+  "message": "Add a task to buy groceries"
+}
+```
+
+### Example Response
+```json
+{
+  "conversation_id": 123,
+  "response": "I've added the task 'buy groceries' to your list.",
+  "tool_calls": [
+    {
+      "name": "add_task",
+      "arguments": {
+        "user_id": "user123",
+        "title": "buy groceries",
+        "description": null
+      }
+    }
+  ]
+}
+```
+
+### Validation Rules
+- Message must be between 1 and 1000 characters
+- User ID in JWT token must match the user ID in the URL
+- Conversation ID must belong to the authenticated user if provided
+- Requests are rate-limited to 100 per minute per user
