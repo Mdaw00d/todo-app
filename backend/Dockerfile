@@ -10,16 +10,12 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy poetry files
-COPY pyproject.toml poetry.lock* ./
+# Copy requirements file
+COPY requirements.txt .
 COPY README.md ./
 
-# Install Poetry
-ENV POETRY_VENV_CREATE=false
-RUN pip install poetry
-
 # Install dependencies
-RUN poetry install --only=main --no-interaction --no-root
+RUN pip install -r requirements.txt
 
 # Copy application code
 COPY . .
