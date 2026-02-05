@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./tailwind-discovery.css";
 
 /* Base styles */
 :root {
