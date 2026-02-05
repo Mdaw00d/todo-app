@@ -15,10 +15,8 @@ COPY pyproject.toml poetry.lock* ./
 COPY README.md ./
 
 # Install Poetry
+ENV POETRY_VENV_CREATE=false
 RUN pip install poetry
-
-# Configure Poetry to not create a virtual environment
-RUN poetry config virtualenvs.create false
 
 # Install dependencies
 RUN poetry install --only=main --no-interaction --no-root
