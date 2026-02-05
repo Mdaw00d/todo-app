@@ -41,6 +41,10 @@ export default function TailwindDiscovery() {
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 transition-all duration-200" />
       <div className="hover:shadow-md hover:border-gray-200" />
       <div className="bg-gray-50 opacity-75" />
+
+      {/* Animation classes - these are essential for Tailwind to discover custom animations */}
+      <div className="animate-fadeIn" />
+      <div className="animate-slideIn" />
     </div>
   );
 }
