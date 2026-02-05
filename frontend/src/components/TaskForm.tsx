@@ -10,9 +10,10 @@ import { CreateTaskData } from '@/services/api';
 
 interface TaskFormProps {
   onSubmit: (data: CreateTaskData) => Promise<void>;
+  onCancel?: () => void;
 }
 
-export function TaskForm({ onSubmit }: TaskFormProps) {
+export function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -96,13 +97,25 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
           </div>
         )}
 
-        <button
-          type="submit"
-          className="btn-primary w-full"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Adding...' : 'Add Task'}
-        </button>
+        <div className="flex gap-3">
+          {onCancel && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="btn-secondary flex-1"
+              disabled={isLoading}
+            >
+              Cancel
+            </button>
+          )}
+          <button
+            type="submit"
+            className={onCancel ? "btn-primary flex-1" : "btn-primary w-full"}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Adding...' : 'Add Task'}
+          </button>
+        </div>
       </div>
     </form>
   );
