@@ -21,7 +21,7 @@ RUN pip install poetry
 RUN poetry config virtualenvs.create false
 
 # Install dependencies
-RUN poetry install --only=main --no-interaction
+RUN poetry install --only=main --no-interaction --no-root
 
 # Copy application code
 COPY . .
