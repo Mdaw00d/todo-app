@@ -55,10 +55,10 @@ async function apiRequest<T>(
 ): Promise<T> {
   const token = getAuthToken(); // getAuthToken is now synchronous
 
-  const headers: HeadersInit = {
+  const headers = {
     'Content-Type': 'application/json',
     ...options.headers,
-  };
+  } as Record<string, string>;
 
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
