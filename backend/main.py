@@ -60,6 +60,8 @@ def create_app() -> FastAPI:
             "http://localhost:3000",
             "http://localhost:3001",
             "https://*.vercel.app",
+            "https://todo-2g7tumi7v-mdaw00ds-projects.vercel.app",  # Your specific Vercel domain
+            "https://todo-q6sovdijt-mdaw00ds-projects.vercel.app",   # Previous domain (for reference)
             "https://todo-app-wj1h.onrender.com"
         ],
         allow_credentials=True,
