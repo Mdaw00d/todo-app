@@ -72,6 +72,15 @@ def create_app() -> FastAPI:
     app.include_router(chat_router, prefix="/api", tags=["chat"])
     app.include_router(tasks_router, prefix="/api", tags=["tasks"])
 
+    # Add root endpoint for Render health checks
+    @app.get("/")
+    def root_health_check():
+        return {"status": "healthy", "service": "todo-backend"}
+
+    @app.head("/")
+    def root_head_check():
+        return {"status": "healthy"}
+
     return app
 
 
