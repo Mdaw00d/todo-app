@@ -29,7 +29,7 @@ class ChatResponse(BaseModel):
     tool_calls: list[dict]
 
 
-@router.post("/{user_id}/chat", response_model=ChatResponse, status_code=status.HTTP_200_OK)
+@router.post("/users/{user_id}/chat", response_model=ChatResponse, status_code=status.HTTP_200_OK)
 async def chat(
     user_id: str,
     request: ChatRequest,
@@ -109,7 +109,7 @@ class ConversationHistoryResponse(BaseModel):
     count: int
 
 
-@router.get("/{user_id}/conversations/{conversation_id}/history", response_model=ConversationHistoryResponse)
+@router.get("/users/{user_id}/conversations/{conversation_id}/history", response_model=ConversationHistoryResponse)
 async def get_conversation_history(
     user_id: str,
     conversation_id: int,

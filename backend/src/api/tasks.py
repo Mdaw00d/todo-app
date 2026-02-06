@@ -9,7 +9,7 @@ from src.database import get_session
 from src.models.task import Task, TaskCreate, TaskPublic as TaskResponse, TaskUpdate
 from src.services.task_service import TaskService
 
-router = APIRouter(prefix="/api/users/{user_id}/tasks", tags=["tasks"])
+router = APIRouter(prefix="/users/{user_id}/tasks", tags=["tasks"])
 
 
 
