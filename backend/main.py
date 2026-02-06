@@ -72,11 +72,11 @@ def create_app() -> FastAPI:
     # Register exception handlers
     register_exception_handlers(app)
 
-    # Include routers
-    app.include_router(health_router, prefix="/api", tags=["health"])
-    app.include_router(chat_router, prefix="/api", tags=["chat"])
-    app.include_router(tasks_router, prefix="/api", tags=["tasks"])
-    app.include_router(auth_router, prefix="/api", tags=["auth"])
+    # Include routers - No prefix since individual routers include paths where needed
+    app.include_router(health_router, tags=["health"])
+    app.include_router(chat_router, tags=["chat"])
+    app.include_router(tasks_router, tags=["tasks"])
+    app.include_router(auth_router, tags=["auth"])
 
     # Add root endpoint for Render health checks
     @app.get("/")

@@ -13,7 +13,7 @@ from ..agents.todo_agent import TodoAgent
 from ..utils.validation import validate_user_id, validate_message_content, validate_conversation_id
 
 
-router = APIRouter()
+router = APIRouter(prefix="/users/{user_id}")
 
 
 class ChatRequest(BaseModel):
