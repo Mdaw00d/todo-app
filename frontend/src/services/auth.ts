@@ -123,6 +123,8 @@ export async function signUpWithEmail(
           ? errorData.detail
           : Array.isArray(errorData.detail)
             ? errorData.detail.map((e: any) => e.msg || e).join(' | ')
+
+
             : JSON.stringify(errorData.detail);
       }
     } catch (e) {
