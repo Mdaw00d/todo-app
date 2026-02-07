@@ -8,7 +8,7 @@ from typing import Optional, List, Dict, Any
 from sqlmodel.ext.asyncio.session import AsyncSession
 from ..services.task_service import TaskService
 from ..models.task import TaskCreate, TaskUpdate
-from ..database.session import get_async_session
+from ..database import get_async_session
 from ..utils.validation import validate_user_id, validate_task_title, validate_task_description
 
 

@@ -9,7 +9,7 @@ from ..services.conversation_service import ConversationService
 from ..services.message_service import MessageService
 from ..models.conversation import ConversationCreate
 from ..models.message import MessageCreate, MessageRole
-from ..database.session import get_async_session
+from ..database import get_async_session
 from ..utils.validation import validate_user_id, validate_message_content
 
 
