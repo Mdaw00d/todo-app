@@ -72,8 +72,10 @@ def create_app() -> FastAPI:
             "https://todo-app-wj1h.onrender.com"
         ],
         allow_credentials=True,
-        allow_methods=["*"],
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],  # Explicitly include OPTIONS
         allow_headers=["*"],
+        # Allow preflight requests to be handled properly
+        allow_origin_regex=r"https://.*\.vercel\.app(/.*)?",
     )
 
     # Register exception handlers
