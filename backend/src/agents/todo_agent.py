@@ -21,8 +21,37 @@ class TodoAgent:
 
     def __init__(self):
         """Initialize the Todo Agent with MCP tools."""
-        self.task_tools = TaskMCPTools()
-        self.conversation_tools = ConversationMCPTools()
+        try:
+            self.task_tools = TaskMCPTools()
+            self.conversation_tools = ConversationMCPTools()
+        except Exception as e:
+            print(f"Error initializing MCP tools: {str(e)}")
+            # Create dummy tools that return error responses
+            class DummyTools:
+                async def add_task(self, **kwargs):
+                    return {"success": False, "error": "MCP tools not available"}
+                
+                async def list_tasks(self, **kwargs):
+                    return {"success": False, "error": "MCP tools not available", "tasks": []}
+                
+                async def complete_task(self, **kwargs):
+                    return {"success": False, "error": "MCP tools not available"}
+                
+                async def update_task(self, **kwargs):
+                    return {"success": False, "error": "MCP tools not available"}
+                
+                async def delete_task(self, **kwargs):
+                    return {"success": False, "error": "MCP tools not available"}
+                
+                async def create_conversation(self, **kwargs):
+                    return {"success": False, "error": "MCP tools not available"}
+                
+                async def add_message_to_conversation(self, **kwargs):
+                    return {"success": False, "error": "MCP tools not available"}
+
+            self.task_tools = DummyTools()
+            self.conversation_tools = DummyTools()
+        
         self.logger = logger
 
     async def process_message(self, user_id: str, conversation_id: Optional[int], message: str) -> Dict[str, Any]:
