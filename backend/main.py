@@ -12,7 +12,14 @@ from src.exceptions.handlers import register_exception_handlers
 from src.api.health import router as health_router
 from src.api.chat_router import router as chat_router
 from src.api.tasks import router as tasks_router
-from src.api.auth import router as auth_router
+
+# Import auth router with error handling to prevent startup failure
+try:
+    from src.api.auth import router as auth_router
+    auth_router_available = True
+except Exception as e:
+    print(f"Warning: Failed to import auth router: {e}")
+    auth_router_available = False
 from src.utils.logging import app_logger
 
 
@@ -76,7 +83,12 @@ def create_app() -> FastAPI:
     app.include_router(health_router, tags=["health"])
     app.include_router(chat_router, tags=["chat"])
     app.include_router(tasks_router, tags=["tasks"])
-    app.include_router(auth_router, tags=["auth"])
+    
+    # Conditionally include auth router if available
+    if auth_router_available:
+        app.include_router(auth_router, tags=["auth"])
+    else:
+        print("Warning: Auth router not available, authentication endpoints will not be accessible")
 
     # Add root endpoint for Render health checks
     @app.get("/")
