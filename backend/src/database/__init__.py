@@ -1,5 +1,5 @@
 # Database package init file
-from .session import get_db_session, get_async_session, engine
+from .session import get_db_session, get_async_session, get_engine
 from .init import create_tables
 
 # For backward compatibility, alias get_db_session as get_session

@@ -17,9 +17,13 @@ from src.api.tasks import router as tasks_router
 try:
     from src.api.auth import router as auth_router
     auth_router_available = True
-except Exception as e:
+except ImportError as e:
     print(f"Warning: Failed to import auth router: {e}")
     auth_router_available = False
+except Exception as e:
+    print(f"Warning: Unexpected error importing auth router: {e}")
+    auth_router_available = False
+
 from src.utils.logging import app_logger
 
 
