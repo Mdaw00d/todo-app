@@ -10,7 +10,7 @@ import os
 from src.database.init import create_tables
 from src.exceptions.handlers import register_exception_handlers
 from src.api.health import router as health_router
-from src.api.chat_router import router as chat_router
+from src.api.chat_router import router as user_chat_router, chat_router
 from src.api.tasks import router as tasks_router
 
 # Import auth router with error handling to prevent startup failure
@@ -87,9 +87,10 @@ def create_app() -> FastAPI:
 
     # Include routers - No prefix since individual routers include paths where needed
     app.include_router(health_router, tags=["health"])
-    app.include_router(chat_router, tags=["chat"])
+    app.include_router(user_chat_router, tags=["user-chat"])  # For user-specific routes
+    app.include_router(chat_router, tags=["chat"])  # For direct chat endpoint
     app.include_router(tasks_router, tags=["tasks"])
-    
+
     # Conditionally include auth router if available
     if auth_router_available:
         app.include_router(auth_router, tags=["auth"])

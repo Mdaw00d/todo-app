@@ -213,7 +213,7 @@ export async function chatWithAssistant(request: ChatRequest): Promise<ChatRespo
     throw new ApiError('Not authenticated', 401);
   }
   // The apiRequest function handles authentication via getAuthToken
-  return apiRequest<ChatResponse>(`/users/${session.user.id}/chat`, {
+  return apiRequest<ChatResponse>(`/chat`, {
     method: 'POST',
     body: JSON.stringify(request),
   });

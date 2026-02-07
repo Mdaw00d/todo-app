@@ -13,7 +13,19 @@ from ..agents.todo_agent import TodoAgent
 from ..utils.validation import validate_user_id, validate_message_content, validate_conversation_id
 
 
+from fastapi import APIRouter, HTTPException, Depends, status
+from typing import Optional, Dict, Any
+from pydantic import BaseModel, Field
+import os
+from ..auth.dependencies import get_current_user
+from ..middleware.auth import validate_user_authorization
+from ..agents.todo_agent import TodoAgent
+from ..utils.validation import validate_user_id, validate_message_content, validate_conversation_id
+
+
+# Create two routers - one with the user prefix for existing routes, one without for chat
 router = APIRouter(prefix="/users/{user_id}")
+chat_router = APIRouter(tags=["chat"])
 
 
 class ChatRequest(BaseModel):
@@ -29,9 +41,8 @@ class ChatResponse(BaseModel):
     tool_calls: list[dict]
 
 
-@router.post("/chat", response_model=ChatResponse, status_code=status.HTTP_200_OK)
+@chat_router.post("/chat", response_model=ChatResponse, status_code=status.HTTP_200_OK)
 async def chat(
-    user_id: str,
     request: ChatRequest,
     current_user: str = Depends(get_current_user)
 ) -> ChatResponse:
@@ -40,22 +51,15 @@ async def chat(
     Processes natural language requests to manage todos.
 
     Args:
-        user_id: ID of the user making the request
         request: Chat request containing message and optional conversation ID
         current_user: Current user from JWT token
 
     Returns:
         ChatResponse: Response from the AI agent
     """
-    # Extract user_id from JWTUser object if needed
-    current_user_id = current_user.user_id if hasattr(current_user, 'user_id') else current_user
+    # Extract user_id from JWTUser object
+    user_id = current_user.user_id if hasattr(current_user, 'user_id') else current_user
     
-    # Validate that the user_id in the URL matches the user in the token
-    if user_id != current_user_id:
-        print(f"User ID mismatch: URL={user_id}, Token={current_user_id}")  # Debug info
-        # For now, allow the request to proceed to avoid "Not Found" errors
-        # In production, you would want to handle this properly
-
     # Validate user_id format
     if not validate_user_id(user_id):
         raise HTTPException(
