@@ -67,7 +67,7 @@ async function apiRequest<T>(
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers,
-    credentials: 'include',  // Include credentials (cookies, etc.) for cross-origin requests
+    // Remove credentials: 'include' for cross-origin requests between Vercel and Render
   });
 
   if (!response.ok) {
