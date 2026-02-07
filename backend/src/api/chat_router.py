@@ -95,10 +95,23 @@ async def chat(
             tool_calls=result["tool_calls"]
         )
 
+    except ImportError as e:
+        # Handle missing dependencies gracefully
+        print(f"Import error in chat: {str(e)}")
+        return ChatResponse(
+            conversation_id=request.conversation_id or 1,
+            response="Chat functionality is temporarily unavailable due to missing dependencies.",
+            tool_calls=[]
+        )
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error processing chat request: {str(e)}"
+        # Log the error for debugging
+        print(f"Error processing chat request: {str(e)}")
+        
+        # Return a user-friendly error response instead of raising an HTTPException
+        return ChatResponse(
+            conversation_id=request.conversation_id or 1,
+            response="I'm sorry, I'm having trouble processing your request right now. Please try again later.",
+            tool_calls=[]
         )
 
 
