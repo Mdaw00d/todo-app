@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from typing import Optional, Dict, Any
 from pydantic import BaseModel, Field
 import os
-from ..auth.jwt_handler import get_current_user
+from ..auth.dependencies import get_current_user
 from ..middleware.auth import validate_user_authorization
 from ..agents.todo_agent import TodoAgent
 from ..utils.validation import validate_user_id, validate_message_content, validate_conversation_id
@@ -42,13 +42,16 @@ async def chat(
     Args:
         user_id: ID of the user making the request
         request: Chat request containing message and optional conversation ID
-        current_user: Current user ID from JWT token
+        current_user: Current user from JWT token
 
     Returns:
         ChatResponse: Response from the AI agent
     """
+    # Extract user_id from JWTUser object if needed
+    current_user_id = current_user.user_id if hasattr(current_user, 'user_id') else current_user
+    
     # Validate that the user_id in the URL matches the user in the token
-    if user_id != current_user:
+    if user_id != current_user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="User ID in token does not match URL user_id"
@@ -134,13 +137,16 @@ async def get_conversation_history(
     Args:
         user_id: ID of the user requesting the history
         conversation_id: ID of the conversation to retrieve
-        current_user: Current user ID from JWT token
+        current_user: Current user from JWT token
 
     Returns:
         ConversationHistoryResponse: History of messages in the conversation
     """
+    # Extract user_id from JWTUser object if needed
+    current_user_id = current_user.user_id if hasattr(current_user, 'user_id') else current_user
+    
     # Validate that the user_id in the URL matches the user in the token
-    if user_id != current_user:
+    if user_id != current_user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="User ID in token does not match URL user_id"
