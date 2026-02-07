@@ -58,11 +58,26 @@ const ChatComponent: React.FC = () => {
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
+      
+      // Provide more specific error message based on the error type
+      let errorMessageText = 'Sorry, I encountered an error processing your request. Please try again.';
+      
+      if (error instanceof Error) {
+        if (error.message.includes('401') || error.message.toLowerCase().includes('unauthorized')) {
+          errorMessageText = 'You are not authorized to use the chat. Please log in again.';
+        } else if (error.message.includes('404')) {
+          errorMessageText = 'The chat service is currently unavailable. Please try again later.';
+        } else if (error.message.includes('Network Error') || error.message.includes('500')) {
+          errorMessageText = 'The AI service is temporarily unavailable. Please try again later.';
+        } else {
+          errorMessageText = `Error: ${error.message}`;
+        }
+      }
 
       const errorMessage: Message = {
         id: Date.now().toString(),
         role: 'assistant',
-        content: 'Sorry, I encountered an error processing your request. Please try again.',
+        content: errorMessageText,
         timestamp: new Date(),
       };
 
