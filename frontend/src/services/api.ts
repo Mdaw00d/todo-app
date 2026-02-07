@@ -108,7 +108,7 @@ export async function listTasks(): Promise<Task[]> {
   }
   // The apiRequest function handles authentication via getAuthToken
   // The backend will validate authentication and return appropriate errors
-  return apiRequest<Task[]>(`/api/users/${session.user.id}/tasks`);
+  return apiRequest<Task[]>(`/users/${session.user.id}/tasks`);
 }
 
 /**
@@ -120,7 +120,7 @@ export async function getTask(taskId: string): Promise<Task> {
     throw new ApiError('Not authenticated', 401);
   }
   // The apiRequest function handles authentication via getAuthToken
-  return apiRequest<Task>(`/api/users/${session.user.id}/tasks/${taskId}`);
+  return apiRequest<Task>(`/users/${session.user.id}/tasks/${taskId}`);
 }
 
 /**
@@ -134,7 +134,7 @@ export async function createTask(
     throw new ApiError('Not authenticated', 401);
   }
   // The apiRequest function handles authentication via getAuthToken
-  return apiRequest<Task>(`/api/users/${session.user.id}/tasks`, {
+  return apiRequest<Task>(`/users/${session.user.id}/tasks`, {
     method: 'POST',
     body: JSON.stringify(data),
   });
@@ -152,7 +152,7 @@ export async function updateTask(
     throw new ApiError('Not authenticated', 401);
   }
   // The apiRequest function handles authentication via getAuthToken
-  return apiRequest<Task>(`/api/users/${session.user.id}/tasks/${taskId}`, {
+  return apiRequest<Task>(`/users/${session.user.id}/tasks/${taskId}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
@@ -169,7 +169,7 @@ export async function deleteTask(
     throw new ApiError('Not authenticated', 401);
   }
   // The apiRequest function handles authentication via getAuthToken
-  return apiRequest<void>(`/api/users/${session.user.id}/tasks/${taskId}`, {
+  return apiRequest<void>(`/users/${session.user.id}/tasks/${taskId}`, {
     method: 'DELETE',
   });
 }
@@ -185,7 +185,7 @@ export async function toggleComplete(
     throw new ApiError('Not authenticated', 401);
   }
   // The apiRequest function handles authentication via getAuthToken
-  return apiRequest<Task>(`/api/users/${session.user.id}/tasks/${taskId}/complete`, {
+  return apiRequest<Task>(`/users/${session.user.id}/tasks/${taskId}/complete`, {
     method: 'PATCH',
   });
 }
@@ -213,7 +213,7 @@ export async function chatWithAssistant(request: ChatRequest): Promise<ChatRespo
     throw new ApiError('Not authenticated', 401);
   }
   // The apiRequest function handles authentication via getAuthToken
-  return apiRequest<ChatResponse>(`/api/users/${session.user.id}/chat`, {
+  return apiRequest<ChatResponse>(`/users/${session.user.id}/chat`, {
     method: 'POST',
     body: JSON.stringify(request),
   });

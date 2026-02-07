@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signInWithEmail } from '@/src/services/auth';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');

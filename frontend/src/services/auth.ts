@@ -2,7 +2,7 @@
  * Authentication service (FastAPI compatible)
  */
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://todo-app-wj1h.onrender.com';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export interface User {
   id: string;
