@@ -13,16 +13,6 @@ from ..agents.todo_agent import TodoAgent
 from ..utils.validation import validate_user_id, validate_message_content, validate_conversation_id
 
 
-from fastapi import APIRouter, HTTPException, Depends, status
-from typing import Optional, Dict, Any
-from pydantic import BaseModel, Field
-import os
-from ..auth.dependencies import get_current_user
-from ..middleware.auth import validate_user_authorization
-from ..agents.todo_agent import TodoAgent
-from ..utils.validation import validate_user_id, validate_message_content, validate_conversation_id
-
-
 # Create router with prefix for user-specific routes
 router = APIRouter(prefix="/users/{user_id}")
 

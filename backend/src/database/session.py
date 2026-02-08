@@ -9,9 +9,14 @@ from contextlib import asynccontextmanager
 import os
 from typing import AsyncGenerator
 
+# Get database URL from environment, default to relative SQLite path
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./todo_chatbot.db")  # <-- fixed
 
-# Get database URL from environment
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./todo_chatbot.db")
+# Convert database URL for async support
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
+elif DATABASE_URL.startswith("sqlite://"):
+    DATABASE_URL = DATABASE_URL.replace("sqlite://", "sqlite+aiosqlite://", 1)
 
 # Global variable to hold the engine
 _engine = None
