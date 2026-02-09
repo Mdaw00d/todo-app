@@ -23,7 +23,7 @@ def format_task_list(tasks: List[Task]) -> str:
 
     # Task rows
     for task in tasks:
-        status = "Complete" if task.completed else "Incomplete"
+        status = "Incomplete" if task.completed else "Completed"
         # Truncate title if too long, pad if too short
         title = task.title[:28] if len(task.title) > 28 else task.title
         lines.append(f"{task.id:<2} | {title:<28} | {status}")

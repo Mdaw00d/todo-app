@@ -1,0 +1,43 @@
+Thank you for installing {{ .Chart.Name }}!
+
+Your todo-chatbot application has been deployed with:
+
+- Backend service: {{ include "todo-bot.fullname" . }}-backend-service
+- Frontend service: {{ include "todo-bot.fullname" . }}-frontend-service
+
+{{- if eq .Values.frontend.service.type "LoadBalancer" }}
+1. Get the frontend LoadBalancer URL:
+   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+   You can watch the status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "todo-bot.fullname" . }}-frontend-service'
+   
+   {{- if eq .Values.frontend.service.type "LoadBalancer" }}
+   export FRONTEND_SVC_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "todo-bot.fullname" . }}-frontend-service --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+   echo "Frontend: http://$FRONTEND_SVC_IP:{{ .Values.frontend.service.port }}"
+   {{- end }}
+{{- else if eq .Values.frontend.service.type "NodePort" }}
+1. Get the frontend NodePort URL:
+   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "todo-bot.fullname" . }}-frontend-service)
+   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "Frontend: http://$NODE_IP:$NODE_PORT"
+{{- else }}
+1. Access the frontend service by port forwarding:
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "todo-bot.fullname" . }}-frontend-service {{ .Values.frontend.service.port }}:{{ .Values.frontend.service.targetPort }}
+   Then visit http://localhost:{{ .Values.frontend.service.port }}
+{{- end }}
+
+2. Access the backend service internally at:
+   {{ include "todo-bot.fullname" . }}-backend-service.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.backend.service.port }}
+
+3. Check the status of your pods:
+   kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}"
+
+{{- if .Values.ingress.enabled }}
+4. If ingress is enabled, access the application at:
+{{- range $host := .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}
+{{- end }}
+{{- end }}
+
+For troubleshooting, check the logs:
+- Backend: kubectl logs -n {{ .Release.Namespace }} deployment/{{ include "todo-bot.fullname" . }}-backend
+- Frontend: kubectl logs -n {{ .Release.Namespace }} deployment/{{ include "todo-bot.fullname" . }}-frontend

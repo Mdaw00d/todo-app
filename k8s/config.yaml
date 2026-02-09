@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-backend-config
+  namespace: todo-app
+data:
+  port: "8000"
+  database-url: "sqlite:///./todo.db"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: todo-backend-secrets
+  namespace: todo-app
+type: Opaque
+data:
+  better-auth-secret: c3VwZXJzZWNyZXRrZXlmb3JhdXRoZW50aWNhdGlvbg==
